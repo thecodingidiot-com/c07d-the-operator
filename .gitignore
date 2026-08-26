@@ -1,0 +1,4 @@
+*.o
+solution/c07shell
+solution/test_parser
+solution/libtci/*.a
