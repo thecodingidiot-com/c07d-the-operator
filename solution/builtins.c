@@ -22,13 +22,11 @@ static int builtin_cd(t_shell *sh, char **argv)
     target = argv[1];
     if (!target)
         target = envp_get(sh->envp, "HOME");
-    if (!target)
-    {
+    if (!target) {
         tci_printf("cd: no HOME set\n");
         return (1);
     }
-    if (chdir(target) != 0)
-    {
+    if (chdir(target) != 0) {
         tci_printf("cd: %s: No such file or directory\n", target);
         return (1);
     }
@@ -39,8 +37,7 @@ static int builtin_pwd(void)
 {
     char    buf[4096];
 
-    if (!getcwd(buf, sizeof(buf)))
-    {
+    if (!getcwd(buf, sizeof(buf))) {
         tci_printf("pwd: error retrieving current directory\n");
         return (1);
     }
@@ -59,11 +56,9 @@ static int builtin_export(t_shell *sh, char **argv)
     size_t  nlen;
 
     i = 1;
-    while (argv[i])
-    {
+    while (argv[i]) {
         eq = tci_strchr(argv[i], '=');
-        if (eq)
-        {
+        if (eq) {
             nlen = (size_t)(eq - argv[i]);
             if (nlen >= sizeof(name))
                 nlen = sizeof(name) - 1;
@@ -82,8 +77,7 @@ static int builtin_unset(t_shell *sh, char **argv)
     int i;
 
     i = 1;
-    while (argv[i])
-    {
+    while (argv[i]) {
         envp_unset(&sh->envp, argv[i]);
         i++;
     }
@@ -95,8 +89,7 @@ static int builtin_env(t_shell *sh)
     int i;
 
     i = 0;
-    while (sh->envp[i])
-    {
+    while (sh->envp[i]) {
         tci_printf("%s\n", sh->envp[i]);
         i++;
     }

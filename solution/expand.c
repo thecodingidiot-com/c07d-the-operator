@@ -23,8 +23,7 @@ static void buf_push(t_buf *b, char c)
 {
     char    *bigger;
 
-    if (b->len + 2 >= b->cap)
-    {
+    if (b->len + 2 >= b->cap) {
         bigger = tci_calloc(b->cap * 2, 1);
         tci_memcpy(bigger, b->data, b->len);
         free(b->data);
@@ -38,8 +37,7 @@ static void buf_push(t_buf *b, char c)
 
 static void buf_push_str(t_buf *b, char const *s)
 {
-    while (s && *s)
-    {
+    while (s && *s) {
         buf_push(b, *s);
         s++;
     }
@@ -67,16 +65,13 @@ static char *expand_word(t_shell *sh, char const *word)
 
     buf_init(&buf);
     i = 0;
-    while (word[i])
-    {
-        if (word[i] == '$' && word[i + 1] == '?')
-        {
+    while (word[i]) {
+        if (word[i] == '$' && word[i + 1] == '?') {
             snprintf(status_str, sizeof(status_str), "%d", sh->last_status);
             buf_push_str(&buf, status_str);
             i += 2;
         }
-        else if (word[i] == '$' && is_ident_start(word[i + 1]))
-        {
+        else if (word[i] == '$' && is_ident_start(word[i + 1])) {
             i++;
             start = i;
             while (is_ident_char(word[i]))
@@ -87,8 +82,7 @@ static char *expand_word(t_shell *sh, char const *word)
             tci_strlcpy(name, word + start, nlen + 1);
             buf_push_str(&buf, envp_get(sh->envp, name));
         }
-        else
-        {
+        else {
             buf_push(&buf, word[i]);
             i++;
         }
@@ -107,8 +101,7 @@ char **expand_argv(t_shell *sh, char **argv)
         n++;
     out = tci_calloc(n + 1, sizeof(char *));
     i = 0;
-    while (i < n)
-    {
+    while (i < n) {
         out[i] = expand_word(sh, argv[i]);
         i++;
     }
@@ -134,12 +127,10 @@ static void wbuf_push(t_wbuf *b, char *s)
     char    **bigger;
     size_t  i;
 
-    if (b->len + 2 >= b->cap)
-    {
+    if (b->len + 2 >= b->cap) {
         bigger = tci_calloc(b->cap * 2, sizeof(char *));
         i = 0;
-        while (i < b->len)
-        {
+        while (i < b->len) {
             bigger[i] = b->data[i];
             i++;
         }
@@ -154,8 +145,7 @@ static void wbuf_push(t_wbuf *b, char *s)
 
 static int has_glob_char(char const *s)
 {
-    while (*s)
-    {
+    while (*s) {
         if (*s == '*' || *s == '?' || *s == '[')
             return (1);
         s++;
@@ -174,14 +164,11 @@ char **expand_wildcards(char **argv)
 
     wbuf_init(&out);
     i = 0;
-    while (argv[i])
-    {
+    while (argv[i]) {
         if (has_glob_char(argv[i]) && glob(argv[i], 0, NULL, &g) == 0
-            && g.gl_pathc > 0)
-        {
+            && g.gl_pathc > 0) {
             j = 0;
-            while (j < g.gl_pathc)
-            {
+            while (j < g.gl_pathc) {
                 wbuf_push(&out, tci_strdup(g.gl_pathv[j]));
                 j++;
             }
@@ -199,8 +186,7 @@ void free_expanded(char **argv)
     int i;
 
     i = 0;
-    while (argv[i])
-    {
+    while (argv[i]) {
         free(argv[i]);
         i++;
     }
