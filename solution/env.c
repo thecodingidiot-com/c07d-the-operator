@@ -26,8 +26,7 @@ char **envp_init(void)
     count = envp_count(environ);
     copy = tci_calloc(count + 1, sizeof(char *));
     i = 0;
-    while (i < count)
-    {
+    while (i < count) {
         copy[i] = tci_strdup(environ[i]);
         i++;
     }
@@ -47,8 +46,7 @@ char *envp_get(char **envp, char const *name)
     int i;
 
     i = 0;
-    while (envp && envp[i])
-    {
+    while (envp && envp[i]) {
         if (name_matches(envp[i], name))
             return (envp[i] + tci_strlen(name) + 1);
         i++;
@@ -74,10 +72,8 @@ void envp_set(char ***envp, char const *name, char const *value)
     tci_strlcat(entry, "=", size);
     tci_strlcat(entry, value, size);
     i = 0;
-    while ((*envp)[i])
-    {
-        if (name_matches((*envp)[i], name))
-        {
+    while ((*envp)[i]) {
+        if (name_matches((*envp)[i], name)) {
             free((*envp)[i]);
             (*envp)[i] = entry;
             return;
@@ -87,8 +83,7 @@ void envp_set(char ***envp, char const *name, char const *value)
     count = envp_count(*envp);
     bigger = tci_calloc(count + 2, sizeof(char *));
     i = 0;
-    while (i < count)
-    {
+    while (i < count) {
         bigger[i] = (*envp)[i];
         i++;
     }
@@ -104,14 +99,11 @@ void envp_unset(char ***envp, char const *name)
     int j;
 
     i = 0;
-    while ((*envp)[i])
-    {
-        if (name_matches((*envp)[i], name))
-        {
+    while ((*envp)[i]) {
+        if (name_matches((*envp)[i], name)) {
             free((*envp)[i]);
             j = i;
-            while ((*envp)[j])
-            {
+            while ((*envp)[j]) {
                 (*envp)[j] = (*envp)[j + 1];
                 j++;
             }
@@ -126,8 +118,7 @@ void envp_free(char **envp)
     int i;
 
     i = 0;
-    while (envp && envp[i])
-    {
+    while (envp && envp[i]) {
         free(envp[i]);
         i++;
     }
